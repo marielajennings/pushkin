@@ -1,42 +1,43 @@
 import psycopg2
 import os
 
-def dbConnData():
-    return psycopg2.connect(os.environ['DATABASE_URL'])
 
-def queryDbMain(sql):
-    conn = None
-    try:
-        conn = dbConnData()
-        cur = conn.cursor()
-        cur.execute(sql)
-        result = cur.fetchall()
-        cur.close()
-        return result
+def queryDbMain(ch, sql):
+    ch.queue_declare(queue=os.environ['LOGGER_QUEUE'])
 
-    except (Exception, psycopg2.DatabaseError) as err:
-        print(err)
-        return { 'message': 'query error: {}'.format(err) }
+    ch.basic_publish(exchange='',
+            routing_key=os.environ['LOGGER_QUEUE'],
+            body=sql)
 
-    finally:
-        if conn is not None:
-            conn.close()
+
+
 
 #########################################################################
 # all methods below are rpc-used methods
 # and must return a jsonizable object
 #########################################################################
 
-def health(data):
+def health(ch, method, props, data):
+    ch.basic_publish(exchange = '',
+            routing_key = props.reply_to,
+            properties = pika.BasicProperties(correlation_id=props.correlation_id),
+            body = responseJSON
+            )
+
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+
     return { 'message': 'very healthy' }
 
-def totalQuestionResponses(data):
-    return queryDbMain('SELECT COUNT(*) FROM "${QUIZ_NAME}_stimuli"')
+def totalQuestionResponses(ch, method, props, data):
+    ch.basic_publish(exchange = '',
+            routing_key = props.reply_to,
+            properties = pika.BasicProperties(correlation_id=props.correlation_id),
+            body = responseJSON
+            )
 
-def userQuestionResponses(data):
-    sql = 'SELECT COUNT(*) FROM "${QUIZ_NAME}_stimulusResponses" WHERE user_id = {}'.format(data.user_id)
-    return queryDbMain(sql)
+    ch.basic_ack(delivery_tag = method.delivery_tag)
 
+    return queryDbMain(ch, 'SELECT COUNT(*) FROM "${QUIZ_NAME}_stimuli"')
 
 #########################################################################
 # map all api methods requested via the controller to functions
