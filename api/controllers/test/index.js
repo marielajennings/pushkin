@@ -3,57 +3,45 @@ const path = require('path');
 const fs = require('fs');
 const RPCParams = require('./RPCParams');
 
-module.exports = (rpc, conn, dbWrite) => { // don't use dbWrite (deprecated)
+module.exports = (rpc, conn) => {
 	const router = new express.Router();
 
 	const task_queue = 'test_quiz_taskworker'; // for stuff that'll need ML, etc.
 	const db_read_queue = 'test_quiz_dbread'; // simple endpoints
 	const db_write_queue = 'test_quiz_dbwrite'; // simple endpoints
 
-	const stdGets = [
-		// user-specific endpoints
-		{ path: '/nextQuestion', method: 'nextQuestion', // get the next question for user in this quiz
-			data: req => ({user_id: req.query.user_id}), queue: db_read_queue },
-		{ path: '/questionsAnswered', method: 'questionsAnswered', // questions answered by this user so far
-			data: req => ({ user_id: req.query.user_id }), queue: db_read_queue },
-		{ path: '/feedback', method: 'getFeedback', // called when quiz has ended, make a prediction based on user responses
+	// everything is just going to use POST as of 7/23/18's meeting
+	const stdPosts = [
+		{ path: '/createUserWithAuth', method: 'generateUserWithAuth', queue: db_write_queue,
+			data: req => ({ auth_id: req.query.auth_id }) },
+
+		{ path: '/createUser', method: 'generateUser', queue: db_write_queue, data: req => '' },
+
+		{ path: '/users/:auth_id', method: 'updateUser', queue: db_write_queue,
+			data: req => ({ user_id: req.body.user_id, auth_id: req.params.auth_id }) },
+
+		{ path: '/startExperiment', method: 'startExperiment', queue: task_queue, data: req => '' },
+
+		{ path: '/getAllStimuli', method: 'getAllStimuli', queue: db_read_queue,
+			data: req => ({ user_id: req.body.user_id }) },
+
+		{ path: '/metaResponse', method: 'insertMetaResponse', queue: db_write_queue, 
+			data: req => ({ user_id: req.body.user_id, data: req.body.data }) },
+
+		{ path: '/stimulusResponse', method: 'insertStimulusResponse', queue: db_write_queue,
+			data: req => ({ user_id: req.body.user_id, data_string: req.body.data_string }) },
+
+		{ path: '/nextStimulus', method: 'nextStimulus', queue: task_queue,
+			data: req => ({ user_id: req.body.user_id }) },
+
+		{ path: '/feedback', method: 'getFeedback', 
 			data: req => ({ user_id: req.query.user_id }), queue: task_queue },
 
-		// general quiz endpoints
-		{ path: '/health', method: 'health', data: req => '', queue: db_read_queue }, // test if server is responsive
-		{ path: '/random', method: 'random', data: req => '', queue: db_read_queue }, // get a random question
-		{ path: '/questions', method: 'getAllQuestions', data: req => '', queue: db_read_queue }, // get all questions in this quiz
-		{ path: '/totalQuestions', method: 'totalQuestions', data: req => '', queue: db_read_queue } // total questions answered by all users
+		{ path: '/activateStimuli', method: 'activateStimuli', queue: task_queue, data: req => '' }
 	];
-
-	const stdPosts = [
-		{ path: '/respond', method: 'createResponse', queue: db_write_queue, // create a response for this user in the database
-			data: req => ({ user_id: req.body.user_id, data_string: req.body.data_string }) }
-	];
-
-	const stdPuts = [];
-
-	stdGets.forEach(point =>
-		router.get(point.path, (req, res, next) => {
-			const params = new RPCParams(point.method, point.data(req));
-			console.log(`API SENT RPC ON QUEUE ${point.queue}`);
-			return rpc(conn, point.queue, params.getParams())
-				.then(data => res.send(data))
-				.catch(err => res.send(err));
-		})
-	);
 
 	stdPosts.forEach(point =>
 		router.post(point.path, (req, res, next) => {
-			const params = new RPCParams(point.method, point.data(req));
-			return rpc(conn, point.queue, params.getParams())
-				.then(data => res.send(data))
-				.catch(err => res.send(err));
-		})
-	);
-
-	stdPuts.forEach(point =>
-		router.put(point.path, (req, res, next) => {
 			const params = new RPCParams(point.method, point.data(req));
 			return rpc(conn, point.queue, params.getParams())
 				.then(data => res.send(data))
