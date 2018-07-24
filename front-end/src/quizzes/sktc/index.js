@@ -10,10 +10,9 @@ require('script-loader!./jspsych-birth-question.js');
 
 import React from 'react';
 import { browserHistory } from 'react-router';
-import axiosSortingTask from './axiosSortingTask';
+import localAxios from './localAxios';
 import baseUrl from '../../core/baseUrl';
 import s from './sorting-task.css';
-const jsPsych = jsPsych; // make eslint happy
 
 var shuffle = (a) => {
 	var j, x, i;
@@ -126,13 +125,20 @@ class sortingTask extends React.Component {
 
 
 	componentDidMount() {
+		// load interact.js (used by jsPsych image drag plugin)
+		const interactScript = document.createElement('script');
+		interactScript.src = 'https://unpkg.com/interactjs@1.3.4/dist/interact.min.js';
+		interactScript.onload = () => { console.log('interact.js loaded from CDN'); };
+		document.head.appendChild(interactScript);
+
 		document.ontouchmove = function(event){ // eslint-disable-line no-undef
 			event.preventDefault();
 		};
 		/* access to class in inline functions */
 		const _this = this;
 
-		var audio_files = [`${baseUrl}/quizzes/sorting-task/audio/apple.wav`,
+		var audio_files = [
+			`${baseUrl}/quizzes/sorting-task/audio/apple.wav`,
 			`${baseUrl}/quizzes/sorting-task/audio/ball.wav`,
 			`${baseUrl}/quizzes/sorting-task/audio/chair.wav`,
 			`${baseUrl}/quizzes/sorting-task/audio/clock.wav`,
@@ -157,7 +163,8 @@ class sortingTask extends React.Component {
 			`${baseUrl}/quizzes/sorting-task/audio/pretest.wav`,
 			`${baseUrl}/quizzes/sorting-task/audio/shoe.wav`,
 			`${baseUrl}/quizzes/sorting-task/audio/sun.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/toothbrush.wav`];
+			`${baseUrl}/quizzes/sorting-task/audio/toothbrush.wav`
+		];
 
 
 		/* jspsych timeline */
@@ -382,15 +389,12 @@ class sortingTask extends React.Component {
 			]
 		};
 
-		axiosSortingTask
-			.post('/getAllStimuli')
-			.then(function(res) {
-				_this.hideLoading();
-
-				user = res.data.user;
+		localAxios
+			.get('/createUser')
+			.then( res => {
+				_this.setState({ loading: false, user_id: res.data.user_id });
 			})
 			.then(() => {
-
 				mainTimeline.push(demographicsAge);
 				mainTimeline.push(demographicsLang);
 				mainTimeline.push(one);
@@ -400,32 +404,28 @@ class sortingTask extends React.Component {
 				mainTimeline.push(five);
 				mainTimeline.push(test);
 				mainTimeline.push(endPage);
-
 			})
 			.then(() => {
 				jsPsych.init({
 					display_element: this.refs.jsPsychTarget,
 					timeline: mainTimeline,
 					preload_audio: audio_files,
-					on_finish: function() {
-
-					},
 					on_data_update: function(data) {
 						dataArray.push(data);
 						console.log('Just added new data. The contents of the data are: '+JSON.stringify(data));
-						axiosSortingTask
-							.post('/response', {
+						localAxios
+							.post('/metaResponse', {
 								user_id: user,
 								data_string: data
 							})
-							.then(console.log)
-							.catch(console.err);
+							.then(a => { console.log(`metaResponse: ${a}`); })
+							.catch(e => { console.log(`metaResponse: ${e}`); });
 					}
 				});
-			});
+			})
+			.catch(e => { console.log(`aslfdkjasldkfjlaskjfkla: ${e}`); });
 	}
 	render() {
-		const loading = this.state.loading;
 		return (
 			<div style={{
 				position: 'fixed',
@@ -436,17 +436,21 @@ class sortingTask extends React.Component {
 				<audio id="mickey"></audio>
 				<audio id="trash"></audio>
 				<div id="jsPsychContainer" >
-					<div style={{ display: loading ? '' : 'none' }}>
+					<div style={{ display: this.state.loading ? '' : 'none' }}>
 						<p className={s.loading}>
 							<b>Loading...</b>
 						</p>
 					</div>
 					<div ref="jsPsychTarget" id="jsPsychTarget" />
 				</div>
+				{/* these are completely useless, but some of the jsPsych dependencies
+						keep assuming they exist and try to change their styling...
+				*/}
+				<div id='header'></div>
+				<div id='footer'></div>
 			</div>
 		);
 	}
 
 }
 export default sortingTask;
-/* eslint-disable max-len */

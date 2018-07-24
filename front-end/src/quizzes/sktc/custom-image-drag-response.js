@@ -12,27 +12,6 @@ window.allowDrop = function(event) {
   event.preventDefault();
   //console.log(event.toElement.currentSrc);
 };
-/*
-var drop = function(event) {
-
-  if(event.toElement.currentSrc == "http://0.0.0.0:22362/static/images/mickey.jpg"){
-    var choice = event.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
-    console.log(event);
-    console.log("mickey");
-  }else if(event.toElement.currentSrc == "http://0.0.0.0:22362/static/images/trash.jpg"){
-    var choice = event.currentTarget.getAttribute('data-choice'); // don't use dataset for jsdom compatibility
-    console.log(choice);
-    console.log("trash");
-  }
-  console.log("drag drop success");
-};
-
-
-var drag = function(event){
-   console.log("Testing drag inside");
-   /*event.dataTransfer.setData("img", event.target.id);
-};
-*/
 
 jsPsych.plugins['image-drag-response'] = (function() {
   var plugin = {};

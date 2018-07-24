@@ -3,6 +3,6 @@ import Axios from 'axios';
 export default Axios.create({
 	baseURL:
 	process.env.NODE_ENV === 'production'
-		? '/api/sorting-task'
-		: '//localhost/api/sorting-task'
+		? '/api/sktc'
+		: '//localhost/api/sktc'
 });
