@@ -127,6 +127,9 @@ case "${sub_command}" in
 	"compile")
 		.pushkin/bin/compileFrontEnd.sh "$@"
 		;;
+	"start")
+		docker-compose -f "${pushkin_docker_compose_noDep_file}" up
+		;;
 	*)
 		showUsage
 		die "command ${sub_command} does not exist"
