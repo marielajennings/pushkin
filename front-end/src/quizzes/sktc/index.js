@@ -33,144 +33,60 @@ var pickSeven = (array) => {
 	return a;
 };
 
+//var jsPsych = jsPsych; // make eslint happy
+
 class sortingTask extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { loading: true };
 		browserHistory.listen(location => { // eslint-disable-line no-unused-vars
-			jsPsych.endExperiment();
+			jsPsych.endExperiment(); // eslint-disable-line no-undef
 			window.location.reload(); // eslint-disable-line no-undef
 		});
 	}
 
-	/* Added get trials here */
-	//!!!!!!! not used anywhere in this file... !!!!!!!!!!!!
-	/*
-	getTrials() {
-		let arr = [];
-		let label = '';
-		let a_trial = {};
-		let intermediate = {};
-		let imgs_shuffled = [];
-		let tag = 0;
-
-		let stims_shuf = jsPsych.randomization.shuffle([
-			'monkey',
-			'flower',
-			//  'sun',
-			'clock',
-			'hat',
-			//'airplane',
-			//  'dog',
-			//  'car',
-			'ball',
-			//'cat',
-			//  'ice cream',
-			'cookie',
-			'eye',
-			'apple',
-			//  'book',
-			'ear',
-			'chair',
-			'telephone',
-			// 'toothbrush',
-			// 'monkey',
-			//  'shoe'
-
-		]);
-		let img_tags = [1,2,3,4,5,6,7,8,9,10];
-
-
-
-		for (let i in stims_shuf) {
-
-			label = stims_shuf[i];
-			imgs_shuffled = jsPsych.randomization.shuffle(img_tags);
-
-			intermediate = {
-				type: 'single-audio',
-				stimulus: `${baseUrl}/quizzes/sorting-task/audio/${label}.wav`,
-				timing_response: 5000,
-				response_ends_trial: false,
-				prompt: `Mickey wants all of the ${label}'s!`
-			},
-
-
-
-				arr.push(intermediate);
-
-			for (let j in imgs_shuffled) {
-
-				tag = imgs_shuffled[j];
-
-				a_trial = {
-					type: 'image-drag-response',
-					stimulus: `${baseUrl}/quizzes/sorting-task/images/test_trials/${label}/${label}_${tag}.jpg`,
-					choices: ['MICKEY', 'TRASH'],
-					button_html: [`<button id = "dragButton0" class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/mickey.jpg style="width:6em;height:6em;"></button>`, `<button id = "dragButton1" class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/trash.jpg style="width:6em;height:6em;"></button>`],
-					prompt: `<p>Give Mickey all of the ${label}'s! </p>`,
-					margin_vertical: '0px',
-					margin_horizontal: '75px',
-					mickey_audio: `${baseUrl}/quizzes/sorting-task/audio/mickey2.wav`,
-					trash_audio: `${baseUrl}/quizzes/sorting-task/audio/trash.wav`
-				};
-				arr.push(a_trial);
-			}
-
-
-		}
-		return arr;
-	}
-	*/
-
-
 	componentDidMount() {
 		// load interact.js (used by jsPsych image drag plugin)
-		const interactScript = document.createElement('script');
+		const interactScript = document.createElement('script'); // eslint-disable-line no-undef
 		interactScript.src = 'https://unpkg.com/interactjs@1.3.4/dist/interact.min.js';
 		interactScript.onload = () => { console.log('interact.js loaded from CDN'); };
-		document.head.appendChild(interactScript);
+		document.head.appendChild(interactScript); // eslint-disable-line no-undef
 
 		document.ontouchmove = function(event){ // eslint-disable-line no-undef
 			event.preventDefault();
 		};
 		/* access to class in inline functions */
 		const _this = this;
-
-		var audio_files = [
-			`${baseUrl}/quizzes/sorting-task/audio/apple.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/ball.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/chair.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/clock.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/cookie.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/ear.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/eye.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/flower.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/hat.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/monkey.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/telephone.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/mickey2.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/trash.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/Mickey_GoodJob.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/airplane.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/apple.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/book.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/car.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/cat.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/dog.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/icecream.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/monkey.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/pretest.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/shoe.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/sun.wav`,
-			`${baseUrl}/quizzes/sorting-task/audio/toothbrush.wav`
+		const stims = [
+			{singular: 'apple', plural: 'apples', indArt: 'an apple'},
+			{singular: 'airplane', plural: 'airplanes', indArt: 'an airplane'},
+			{singular: 'ball', plural: 'balls', indArt: 'a ball'},
+			{singular: 'book', plural: 'books', indArt: 'a book'},
+			{singular: 'car', plural: 'cars', indArt: 'a car'},
+			{singular: 'cat', plural: 'cats', indArt: 'a cat'},
+			{singular: 'chair', plural: 'chairs', indArt: 'a chair'},
+			{singular: 'clock', plural: 'clocks', indArt: 'a clock'},
+			{singular: 'cookie', plural: 'cookies', indArt: 'a cookie'},
+			{singular: 'dog', plural: 'dogs', indArt: 'a dog'},
+			{singular: 'ear', plural: 'ears', indArt: 'an ear'},
+			{singular: 'eye', plural: 'eyes', indArt: 'an eye'},
+			{singular: 'flower', plural: 'flowers', indArt: 'a flower'},
+			{singular: 'hat', plural: 'hats', indArt: 'a hat'},
+			{singular: 'icecream', plural: 'ice cream', indArt: 'ice cream'},
+			{singular: 'monkey', plural: 'monkeys', indArt: 'a monkey'},
+			{singular: 'shoe', plural: 'shoes', indArt: 'a shoe'},
+			{singular: 'sun', plural: 'suns', indArt: 'a sun'},
+			{singular: 'telephone', plural: 'telephones', indArt: 'a telephone'},
+			{singular: 'toothbrush', plural: 'toothbrushes', indArt: 'a toothbrush'}
 		];
+
+
+		var audio_files = stims.map(stim => `${baseUrl}/audio/${stim.singular}.wav`);
 
 
 		/* jspsych timeline */
 		var mainTimeline = [];
 		const dataArray = [];
-		let user;
 
 		var demographicsAge = {
 			type: 'birth-question',
@@ -187,83 +103,29 @@ class sortingTask extends React.Component {
 		};
 		var one = {
 			type: 'single-audio',
-			stimulus: `${baseUrl}/quizzes/sorting-task/audio/pretest.wav`,
+			stimulus: `${baseUrl}/audio/pretest.wav`,
 			response_ends_trial: false,
 			timing_response: 10000,
 			prompt: 'Give Mickey all of the triangles! Everything that\'s not a triangle, goes in the trash!'
 		};
-
-		var two = {
+		const twoThreeFourFive = [1,2,3,4].map(n => ({
 			type: 'image-drag-response',
-			stimulus: function(){
-				return `${baseUrl}/quizzes/sorting-task/images/pre-test/pre-test_1.jpg`;
-			},
+			stimulus: `${baseUrl}/images/pre-test/pre-test_${n}.jpg`,
 			choices: ['MICKEY', 'TRASH'],
-			button_html: [`<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/mickey.jpg style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/trash.jpg style="width:9em;height:15em;"></button>`],
-			prompt: function(){
-				return '<p>Give Mickey all of the triangles!</p>';
-			},
+			button_html: [`<button class="jspsych-btn"><img src=${`${baseUrl}/images/mickey.jpg`} style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/images/trash.jpg style="width:9em;height:15em;"></button>`],
+			prompt: () => '<p>Give Mickey all of the triangles!</p>',
 			margin_vertical: '0px',
 			margin_horizontal: '75px',
-			mickey_audio: `${baseUrl}/quizzes/sorting-task/audio/mickey2.wav`,
-			trash_audio: `${baseUrl}/quizzes/sorting-task/audio/trash.wav`
-		};
-
-		var three = {
-			type: 'image-drag-response',
-			stimulus: function(){
-				return `${baseUrl}/quizzes/sorting-task/images/pre-test/pre-test_2.jpg`;
-			},
-			choices: ['MICKEY', 'TRASH'],
-			button_html: [`<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/mickey.jpg style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/trash.jpg style="width:9em;height:15em;"></button>`],
-			prompt: function(){
-				return '<p>Give Mickey all of the triangles!</p>';
-			},
-			margin_vertical: '0px',
-			margin_horizontal: '75px',
-			mickey_audio: `${baseUrl}/quizzes/sorting-task/audio/mickey2.wav`,
-			trash_audio: `${baseUrl}/quizzes/sorting-task/audio/trash.wav`
-		};
-
-
-		var four = {
-			type: 'image-drag-response',
-			stimulus: function(){
-				return `${baseUrl}/quizzes/sorting-task/images/pre-test/pre-test_3.jpg`;
-			},
-			choices: ['MICKEY', 'TRASH'],
-			button_html: [`<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/mickey.jpg style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/trash.jpg style="width:9em;height:15em;"></button>`],
-			prompt: function(){
-				return '<p>Give Mickey all of the triangles!</p>';
-			},
-			margin_vertical: '0px',
-			margin_horizontal: '75px',
-			mickey_audio: `${baseUrl}/quizzes/sorting-task/audio/mickey2.wav`,
-			trash_audio: `${baseUrl}/quizzes/sorting-task/audio/trash.wav`
-		};
-
-		var five = {
-			type: 'image-drag-response',
-			stimulus: function(){
-				return `${baseUrl}/quizzes/sorting-task/images/pre-test/pre-test_4.jpg`;
-			},
-			choices: ['MICKEY', 'TRASH'],
-			button_html: [`<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/mickey.jpg style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/trash.jpg style="width:9em;height:15em;"></button>`],
-			prompt: function(){
-				return '<p>Give Mickey all of the triangles!</p>';
-			},
-			margin_vertical: '0px',
-			margin_horizontal: '75px',
-			mickey_audio: `${baseUrl}/quizzes/sorting-task/audio/mickey2.wav`,
-			trash_audio: `${baseUrl}/quizzes/sorting-task/audio/trash.wav`
-		};
+			mickey_audio: `${baseUrl}/audio/mickey2.wav`,
+			trash_audio: `${baseUrl}/audio/trash.wav`,
+		}));
 
 		var endPage = {
 			type: 'ending',
-			mickey_audio:`${baseUrl}/quizzes/sorting-task/audio/Mickey_GoodJob.wav`,
+			mickey_audio: `${baseUrl}/audio/Mickey_GoodJob.wav`,
 			pages: [
 				`Thanks for helping Mickey out! Good job!
-				<img id= mickeyEnding src=${baseUrl}/quizzes/sorting-task/images/mickey-mouse.jpg></img>`,
+				<img id= mickeyEnding src=${baseUrl}/images/mickey-mouse.jpg></img>`,
 			],
 		};
 
@@ -339,16 +201,15 @@ class sortingTask extends React.Component {
 				{
 					type: 'single-audio',
 					stimulus: function(){
-						var label = jsPsych.timelineVariable('label', true);
-						console.log(`${baseUrl}/quizzes/sorting-task/audio/${label}.wav`);
-						return `${baseUrl}/quizzes/sorting-task/audio/${label}.wav`;
+						var label = jsPsych.timelineVariable('label', true); // eslint-disable-line no-undef
+						return `${baseUrl}/audio/${label}.wav`;
 					},
 					timing_response: 10000,
 					response_ends_trial: false,
 					prompt: function(){
 						//var label = jsPsych.timelineVariable('label', true);
-						var label2= jsPsych.timelineVariable('label2', true);
-						var label3= jsPsych.timelineVariable('label3', true);
+						var label2= jsPsych.timelineVariable('label2', true); // eslint-disable-line no-undef
+						var label3= jsPsych.timelineVariable('label3', true); // eslint-disable-line no-undef
 						return `Give Mickey all of the ${label2}! Everything that's not ${label3}, goes in the trash!`;
 					},
 
@@ -370,19 +231,19 @@ class sortingTask extends React.Component {
 					timeline: [
 						{	type: 'image-drag-response',
 							stimulus: function(){
-								var label = jsPsych.timelineVariable('label', true);
-								var picture_id = jsPsych.timelineVariable('picture_id', true);
-								return `${baseUrl}/quizzes/sorting-task/images/test_trials/${label}/${label}_${picture_id}.jpg`;
+								var label = jsPsych.timelineVariable('label', true); // eslint-disable-line no-undef
+								var picture_id = jsPsych.timelineVariable('picture_id', true); // eslint-disable-line no-undef
+								return `./${label}/${label}_${picture_id}.jpg`;
 							},
 							choices: ['MICKEY', 'TRASH'],
-							button_html: [`<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/mickey.jpg style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/quizzes/sorting-task/images/trash.jpg style="width:9em;height:15em;"></button>`],
+							button_html: [`<button class="jspsych-btn"><img src=${baseUrl}/images/mickey.jpg style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/images/trash.jpg style="width:9em;height:15em;"></button>`],
 							prompt: function(){
-								return '<p>Give Mickey all of the '+ jsPsych.timelineVariable('label2', true)+'! </p>';
+								return '<p>Give Mickey all of the '+ jsPsych.timelineVariable('label2', true)+'! </p>'; // eslint-disable-line no-undef
 							},
 							margin_vertical: '0px',
 							margin_horizontal: '75px',
-							mickey_audio: `${baseUrl}/quizzes/sorting-task/audio/mickey2.wav`,
-							trash_audio: `${baseUrl}/quizzes/sorting-task/audio/trash.wav`
+							mickey_audio: `${baseUrl}/audio/mickey2.wav`,
+							trash_audio: `${baseUrl}/audio/trash.wav`
 						}
 					]
 				}
@@ -398,15 +259,12 @@ class sortingTask extends React.Component {
 				mainTimeline.push(demographicsAge);
 				mainTimeline.push(demographicsLang);
 				mainTimeline.push(one);
-				mainTimeline.push(two);
-				mainTimeline.push(three);
-				mainTimeline.push(four);
-				mainTimeline.push(five);
+				mainTimeline.concat(twoThreeFourFive);
 				mainTimeline.push(test);
 				mainTimeline.push(endPage);
 			})
 			.then(() => {
-				jsPsych.init({
+				jsPsych.init({ // eslint-disable-line no-undef
 					display_element: this.refs.jsPsychTarget,
 					timeline: mainTimeline,
 					preload_audio: audio_files,
@@ -420,13 +278,11 @@ class sortingTask extends React.Component {
 							.post('/response', {
 								user_id: _this.state.user_id,
 								data_string: dataString
-							})
-							.then(a => { console.log(`response:`); console.log(a); })
-							.catch(e => { console.log(`response err:`); console.log(e); });
+							});
 					}
 				});
 			})
-			.catch(e => { console.log(`aslfdkjasldkfjlaskjfkla: ${e}`); });
+			.catch(console.log);
 	}
 	render() {
 		return (
