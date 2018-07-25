@@ -417,12 +417,12 @@ class sortingTask extends React.Component {
 							dataString = JSON.stringify(data);
 						} catch (e) { console.log(e); }
 						localAxios
-							.post('/metaResponse', {
+							.post('/response', {
 								user_id: _this.state.user_id,
 								data_string: dataString
 							})
-							.then(a => { console.log(`metaResponse:`); console.log(a); })
-							.catch(e => { console.log(`metaResponse err:`); console.log(e); });
+							.then(a => { console.log(`response:`); console.log(a); })
+							.catch(e => { console.log(`response err:`); console.log(e); });
 					}
 				});
 			})
