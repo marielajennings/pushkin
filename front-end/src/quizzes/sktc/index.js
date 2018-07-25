@@ -390,9 +390,9 @@ class sortingTask extends React.Component {
 		};
 
 		localAxios
-			.get('/createUser')
+			.post('/createUser')
 			.then( res => {
-				_this.setState({ loading: false, user_id: res.data.user_id });
+				_this.setState({ loading: false, user_id: res.data.apiResData });
 			})
 			.then(() => {
 				mainTimeline.push(demographicsAge);
@@ -412,14 +412,17 @@ class sortingTask extends React.Component {
 					preload_audio: audio_files,
 					on_data_update: function(data) {
 						dataArray.push(data);
-						console.log('Just added new data. The contents of the data are: '+JSON.stringify(data));
+						let dataString = 'error';
+						try {
+							dataString = JSON.stringify(data);
+						} catch (e) { console.log(e); }
 						localAxios
 							.post('/metaResponse', {
-								user_id: user,
-								data_string: data
+								user_id: _this.state.user_id,
+								data_string: dataString
 							})
-							.then(a => { console.log(`metaResponse: ${a}`); })
-							.catch(e => { console.log(`metaResponse: ${e}`); });
+							.then(a => { console.log(`metaResponse:`); console.log(a); })
+							.catch(e => { console.log(`metaResponse err:`); console.log(e); });
 					}
 				});
 			})

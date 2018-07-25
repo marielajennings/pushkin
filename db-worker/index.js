@@ -1,5 +1,5 @@
 const amqp = require('amqplib');
-const Worker = require('./worker');
+//const Worker = require('./worker');
 const DB_WRITE_QUEUE = '_db_write';
 const DB_RPC_WORKER = '_rpc_worker';
 const fs = require('fs');
