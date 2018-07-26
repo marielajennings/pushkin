@@ -4,11 +4,10 @@
 docker-compose.production.noEnvDependency.yml
 
 # make lots of irrelevant changes when testing new quizzes
+# this is all temporary stuff moved around by pushkin cli
 server/html/*
 front-end/dist/*
 front-end/src/quizzes/quizzes.js
-quizzes/quizzes/*
-db-worker/models/*
 db-worker/migrations/*
 db-worker/seeds/*
 cron/scripts/*
