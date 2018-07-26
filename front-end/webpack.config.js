@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const pkg = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const DynamicCdnWebpackPlugin = require('dynamic-cdn-webpack-plugin');
 const commandLineArgs = require('command-line-args');
 
 const argOptions = [
@@ -135,6 +136,7 @@ const config = {
 				trackingID: args.google_analytics_site_id,
 			}
 		}),
+		new DynamicCdnWebpackPlugin(),
 		...(args.debug ? [] : [new webpack.optimize.AggressiveMergingPlugin()]),
 		...(args.debug && args.hmr ? [
 			new webpack.HotModuleReplacementPlugin(),
