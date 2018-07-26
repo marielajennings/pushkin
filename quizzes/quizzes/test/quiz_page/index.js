@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router';
 
 import s from './styles.scss';
 import jsPsychStyles from '../libraries/jsPsych/css/jspsych.css';
-import jsPsychTimeline from './quiz_files/jsPsychTimeline';
+//import jsPsychTimeline from './quiz_files/jsPsychTimeline';
 // jsPsych isn't actually a "module" like normal modules are in node/commonJS
 // it needs to be required globally and not assigned to a variable
 require('../libraries/jsPsych/jspsych.js');
