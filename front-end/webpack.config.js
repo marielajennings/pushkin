@@ -129,7 +129,7 @@ const config = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: './src/index.html',
-			title: 'Games With Words',
+			title: 'Sorting Task',
 			options: {
 				debug: args.debug,
 				trackingID: args.google_analytics_site_id,

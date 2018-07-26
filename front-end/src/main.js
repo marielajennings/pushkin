@@ -13,47 +13,58 @@ import 'whatwg-fetch';
 import React from 'react'; // eslint-disable-line no-unused-vars
 import ReactDOM from 'react-dom'; // eslint-disable-line no-unused-vars
 import FastClick from 'fastclick';
-import { Provider } from 'react-redux'; // eslint-disable-line no-unused-vars
 import { Route, Switch, BrowserRouter as Router, browserHistory } from 'react-router-dom'; // eslint-disable-line no-unused-vars
+import Sktc from './quizzes/sktc/index';
+import ErrorPage from './pages/error/index';
+
+
+
+//import { Provider } from 'react-redux'; // eslint-disable-line no-unused-vars
 //import { syncHistoryWithStore } from 'react-router-redux';
-import { rootReducer } from './reducers/index';
-import thunkMiddleware from 'redux-thunk';
-import { compose, createStore, applyMiddleware } from 'redux';
-import { hot } from 'react-hot-loader';
+//import { rootReducer } from './reducers/index';
+//import thunkMiddleware from 'redux-thunk';
+//import { compose, createStore, applyMiddleware } from 'redux';
+//import { hot } from 'react-hot-loader';
 //import { logger } from 'redux-logger';
 
 // Pages / Routing
+/*
 import HomePage from './pages/home/index';
 import About from './pages/about/index';
 import Quizzes from './pages/quizzes/index';
-import ErrorPage from './pages/error/index';
+// kid tester specific site
+import TakeQuiz from './pages/quizzes/TakeQuiz.js';
 import Updates from './pages/updates/index';
 import Container from './pages/containers/container'; // eslint-disable-line no-unused-vars
 import Dashboard from './pages/dashboard/index'; // eslint-disable-line no-unused-vars
 import Forum from './pages/forum/index';
 import Admin from './pages/admin/index';
+*/
 
-import { CONFIG } from './config.js';
-import Auth from './core/auth';
+//import { CONFIG } from './config.js';
+//import Auth from './core/auth';
 
 
-export default function configureStore(initialState) {
-	const middleWares = [ thunkMiddleware /*, logger*/ ];
-	return createStore(
-		rootReducer,
-		initialState,
-		compose(applyMiddleware.apply(this, middleWares))
-	);
-}
+//export default function configureStore(initialState) {
+//	const middleWares = [ thunkMiddleware /*, logger*/ ];
+//	return createStore(
+//		rootReducer,
+//		initialState,
+//		compose(applyMiddleware.apply(this, middleWares))
+//	);
+//}
 
-const store = configureStore();
+//const store = configureStore();
 //const history = syncHistoryWithStore(browserHistory, store);
 
-const App = hot(module)( () => ( // eslint-disable-line no-unused-vars
-	<Provider store={store}>
-		{/*		<Router onUpdate={() => window.scrollTo(0, 0)} history={history}> */}
+//const App = hot(module)( () => ( // eslint-disable-line no-unused-vars
+//	<Provider store={store}>
+//		{/*		<Router onUpdate={() => window.scrollTo(0, 0)} history={history}> */}
+const App = () => (
 			<Router>
 				<Switch>
+					<Route exact path='/' component={Sktc} />
+					{/*
 					<Route exact path='/' component={HomePage}
 						auth={CONFIG.auth}
 						showForum={CONFIG.forum}
@@ -86,23 +97,16 @@ const App = hot(module)( () => ( // eslint-disable-line no-unused-vars
 							showForum={CONFIG.forum}
 						/>
 					)}
+					// kid tester specific site*/}
 					<Route path="/error" component={ErrorPage} />
 					<Route path="*" component={ErrorPage} />
 				</Switch>
 			</Router>
-		</Provider>
-));
+	//		</Provider>
+);
 
 /************** go *************/
 (function() {
 	FastClick.attach(document.body);
 	ReactDOM.render(<App />, document.getElementById('container'));
 })();
-
-
-/*if (module.hot) {
-	module.hot.accept('./core/routes', () => {
-		render(require('./core/routes').routes);
-	});
-}
-*/

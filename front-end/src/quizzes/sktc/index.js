@@ -11,7 +11,8 @@ require('script-loader!./jspsych-birth-question.js');
 import React from 'react';
 import { browserHistory } from 'react-router';
 import localAxios from './localAxios';
-import baseUrl from '../../core/baseUrl';
+import tempBaseUrl from '../../core/baseUrl';
+const baseUrl = `${tempBaseUrl}/quizzes/sorting-task`;
 import s from './sorting-task.css';
 
 var shuffle = (a) => {
@@ -57,31 +58,31 @@ class sortingTask extends React.Component {
 		};
 		/* access to class in inline functions */
 		const _this = this;
-		const stims = [
-			{singular: 'apple', plural: 'apples', indArt: 'an apple'},
-			{singular: 'airplane', plural: 'airplanes', indArt: 'an airplane'},
-			{singular: 'ball', plural: 'balls', indArt: 'a ball'},
-			{singular: 'book', plural: 'books', indArt: 'a book'},
-			{singular: 'car', plural: 'cars', indArt: 'a car'},
-			{singular: 'cat', plural: 'cats', indArt: 'a cat'},
-			{singular: 'chair', plural: 'chairs', indArt: 'a chair'},
-			{singular: 'clock', plural: 'clocks', indArt: 'a clock'},
-			{singular: 'cookie', plural: 'cookies', indArt: 'a cookie'},
-			{singular: 'dog', plural: 'dogs', indArt: 'a dog'},
-			{singular: 'ear', plural: 'ears', indArt: 'an ear'},
-			{singular: 'eye', plural: 'eyes', indArt: 'an eye'},
-			{singular: 'flower', plural: 'flowers', indArt: 'a flower'},
-			{singular: 'hat', plural: 'hats', indArt: 'a hat'},
-			{singular: 'icecream', plural: 'ice cream', indArt: 'ice cream'},
-			{singular: 'monkey', plural: 'monkeys', indArt: 'a monkey'},
-			{singular: 'shoe', plural: 'shoes', indArt: 'a shoe'},
-			{singular: 'sun', plural: 'suns', indArt: 'a sun'},
-			{singular: 'telephone', plural: 'telephones', indArt: 'a telephone'},
-			{singular: 'toothbrush', plural: 'toothbrushes', indArt: 'a toothbrush'}
+		const audio_files = [
+			`${baseUrl}/audio/apple.wav`,
+			`${baseUrl}/audio/airplane.wav`,
+			`${baseUrl}/audio/ball.wav`,
+			`${baseUrl}/audio/book.wav`,
+			`${baseUrl}/audio/car.wav`,
+			`${baseUrl}/audio/cat.wav`,
+			`${baseUrl}/audio/chair.wav`,
+			`${baseUrl}/audio/clock.wav`,
+			`${baseUrl}/audio/cookie.wav`,
+			`${baseUrl}/audio/dog.wav`,
+			`${baseUrl}/audio/ear.wav`,
+			`${baseUrl}/audio/eye.wav`,
+			`${baseUrl}/audio/flower.wav`,
+			`${baseUrl}/audio/hat.wav`,
+			`${baseUrl}/audio/icecream.wav`,
+			`${baseUrl}/audio/monkey.wav`,
+			`${baseUrl}/audio/shoe.wav`,
+			`${baseUrl}/audio/sun.wav`,
+			`${baseUrl}/audio/telephone.wav`,
+			`${baseUrl}/audio/toothbrush.wav`,
+			`${baseUrl}/audio/mickey2.wav`,
+			`${baseUrl}/audio/Mickey_GoodJob.wav`,
+			`${baseUrl}/audio/trash.wav`
 		];
-
-
-		var audio_files = stims.map(stim => `${baseUrl}/audio/${stim.singular}.wav`);
 
 
 		/* jspsych timeline */
@@ -133,66 +134,26 @@ class sortingTask extends React.Component {
 
 			timeline_variables: pickSeven(shuffle(
 				[
-					{label: 'apple',
-						label2: 'apples',
-						label3: 'an apple'},
-					{label: 'airplane',
-						label2: 'airplanes',
-						label3: 'an airplane'},
-					{label: 'ball',
-						label2: 'balls',
-						label3: 'a ball'},
-					{label: 'book',
-						label2: 'books',
-						label3: 'a book'},
-					{label: 'car',
-						label2: 'cars',
-						label3: 'a car'},
-					{label: 'cat',
-						label2: 'cats',
-						label3: 'a cat'},
-					{label: 'chair',
-						label2: 'chairs',
-						label3: 'a chair'},
-					{label: 'clock',
-						label2: 'clocks',
-						label3: 'a clock'},
-					{label: 'cookie',
-						label2: 'cookies',
-						label3: 'a cookie'},
-					{label: 'dog',
-						label2: 'dogs',
-						label3: 'a dog'},
-					{label: 'ear',
-						label2: 'ears',
-						label3: 'an ear'},
-					{label: 'eye',
-						label2: 'eyes',
-						label3: 'an eye'},
-					{label: 'flower',
-						label2: 'flowers',
-						label3: 'a flower'},
-					{label: 'hat',
-						label2: 'hats',
-						label3: 'a hat'},
-					{label: 'icecream',
-						label2: 'ice cream',
-						label3: 'ice cream'},
-					{label: 'monkey',
-						label2: 'monkeys',
-						label3: 'a monkey'},
-					{label: 'shoe',
-						label2: 'shoes',
-						label3: 'a shoe'},
-					{label: 'sun',
-						label2: 'suns',
-						label3: 'a sun'},
-					{label: 'telephone',
-						label2: 'telephones',
-						label3: 'a telephone'},
-					{label: 'toothbrush',
-						label2: 'toothbrushes',
-						label3: 'a toothbrush'}
+					{label: 'apple', label2: 'apples', label3: 'an apple'},
+					{label: 'airplane', label2: 'airplanes', label3: 'an airplane'},
+					{label: 'ball', label2: 'balls', label3: 'a ball'},
+					{label: 'book', label2: 'books', label3: 'a book'},
+					{label: 'car', label2: 'cars', label3: 'a car'},
+					{label: 'cat', label2: 'cats', label3: 'a cat'},
+					{label: 'chair', label2: 'chairs', label3: 'a chair'},
+					{label: 'clock', label2: 'clocks', label3: 'a clock'},
+					{label: 'cookie', label2: 'cookies', label3: 'a cookie'},
+					{label: 'dog', label2: 'dogs', label3: 'a dog'},
+					{label: 'ear', label2: 'ears', label3: 'an ear'},
+					{label: 'eye', label2: 'eyes', label3: 'an eye'},
+					{label: 'flower', label2: 'flowers', label3: 'a flower'},
+					{label: 'hat', label2: 'hats', label3: 'a hat'},
+					{label: 'icecream', label2: 'ice cream', label3: 'ice cream'},
+					{label: 'monkey', label2: 'monkeys', label3: 'a monkey'},
+					{label: 'shoe', label2: 'shoes', label3: 'a shoe'},
+					{label: 'sun', label2: 'suns', label3: 'a sun'},
+					{label: 'telephone', label2: 'telephones', label3: 'a telephone'},
+					{label: 'toothbrush', label2: 'toothbrushes', label3: 'a toothbrush'}
 				]
 			)),
 			randomize_order: true,
@@ -233,7 +194,7 @@ class sortingTask extends React.Component {
 							stimulus: function(){
 								var label = jsPsych.timelineVariable('label', true); // eslint-disable-line no-undef
 								var picture_id = jsPsych.timelineVariable('picture_id', true); // eslint-disable-line no-undef
-								return `./${label}/${label}_${picture_id}.jpg`;
+								return `${baseUrl}/images/${label}/${label}_${picture_id}.jpg`;
 							},
 							choices: ['MICKEY', 'TRASH'],
 							button_html: [`<button class="jspsych-btn"><img src=${baseUrl}/images/mickey.jpg style="width:13em;height:15em;"></button>`, `<button class="jspsych-btn"><img src=${baseUrl}/images/trash.jpg style="width:9em;height:15em;"></button>`],
