@@ -13,7 +13,7 @@ import jsPsychTimeline from './quiz_files/jsPsychTimeline';
 require('../libraries/jsPsych/jspsych.js');
 require('../libraries/jsPsych/plugins/jspsych-instructions.js');
 
-export default class QUIZ_NAME extends React.Component {
+export default class ${QUIZ_NAME} extends React.Component {
 
 	constructor(props) {
 		super(props);
